@@ -1,0 +1,14 @@
+﻿{
+  "name": "skillswap",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "cd frontend && npm run dev --",
+    "build": "cd frontend && npm run build",
+    "start:backend": "cd backend && npm run start",
+    "start": "npm run dev"
+  }
+}

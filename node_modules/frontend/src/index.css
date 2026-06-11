@@ -1,0 +1,33 @@
+:root {
+  --color-background: #F6F0D7;
+  --color-surface: #C5D89D;
+  --color-surface-soft: #9CAB84;
+  --color-accent: #89986D;
+  --color-text: #31322a;
+  --color-muted: #5a5c47;
+  --color-border: #c7c5ae;
+  --color-card: rgba(255, 255, 255, 0.88);
+}
+
+html, body, #root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+input, textarea, select {
+  font: inherit;
+}
+
+a {
+  color: var(--color-accent);
+}

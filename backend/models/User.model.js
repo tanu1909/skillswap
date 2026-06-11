@@ -1,0 +1,58 @@
+import mongoose from 'mongoose';
+
+const userSchema = new mongoose.Schema({
+
+name:{
+    type:String,
+    required:[true,'Name is required'],
+    trim: true
+},
+email:{
+    type:String,
+    required:[true,'Email is required'],
+    unique:true,
+    trim: true,
+    lowercase: true
+},
+passwordHash:{
+    type: String,
+    required:[true,'Password is required']
+},
+bio:{
+    type:String,
+    default:'',
+},
+location:{
+    type:String,
+    default:'' //will hold cloud. url later
+},
+skillsOffered:[
+    {
+        skill:{type:String, required:true},
+        level:{type:String, enum:['Beginner', 'Intermediate', 'Expert'], required:true}
+    }
+],
+availability:[
+    {
+        day:{type: String, enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], required: true },
+    timeSlots:[{type:String}] //"10:00 AM"
+    }
+],
+
+rating:{
+    type:Number,
+    default:0
+},
+isVerified:{
+    type:Boolean,
+    default:false
+}
+
+
+
+},{timestamps: true});
+
+
+
+const User = mongoose.model('User', userSchema);
+export default User;

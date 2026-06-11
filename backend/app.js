@@ -1,0 +1,32 @@
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/user.routes.js';
+import swapRoutes from './routes/swap.routes.js';
+import bookingRoutes from './routes/booking.routes.js';
+import chatRoutes from './routes/chat.routes.js';
+import reviewRoutes from './routes/review.routes.js';
+
+
+
+dotenv.config();
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+// Mount API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes); 
+app.use('/api/swaps', swapRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/reviews', reviewRoutes);
+
+app.get('/', (req, res) => {
+  res.send('SkillSpace API is running smoothly...');
+});
+
+export default app;
