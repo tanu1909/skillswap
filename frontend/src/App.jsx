@@ -7,6 +7,7 @@ import Browse from './pages/Browse.jsx';
 import { useAuth } from './hooks/useAuth.jsx';
 import Profile from './pages/Profile.jsx';
 import Chat from './pages/Chat.jsx';
+import VideoRoom from './pages/VideoRoom.jsx';
 
 function App() {
   const { user } = useAuth();
@@ -30,7 +31,7 @@ function App() {
           element={user ? <Dashboard /> : <Navigate to="/login" replace />} 
         />
 
-        {/* Fallback Catch-all Route */}
+       {/* catch all route */}
         <Route 
           path="*" 
           element={<Navigate to={user ? "/dashboard" : "/login"} replace />} 
@@ -41,6 +42,8 @@ function App() {
         <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" replace />} />
 
         <Route path="/chat" element={user ? <Chat /> : <Navigate to="/login" replace />} />
+
+        <Route path="/room/:bookingId" element={user ? <VideoRoom /> : <Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   );
