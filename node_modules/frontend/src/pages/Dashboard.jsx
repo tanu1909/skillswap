@@ -141,8 +141,8 @@ function Dashboard() {
           </p>
         </div>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-          <Link to="/profile" style={{ padding: '10px 20px', background: 'var(--color-accent-soft)', color: 'var(--color-text)', textDecoration: 'none', borderRadius: '6px', border: '1px solid var(--color-accent)', fontWeight: 'bold', fontSize: '14px' }}>
-            Edit Profile 🛠️
+          <Link to="/profile/view" style={{ padding: '10px 20px', background: 'var(--color-card)', color: 'var(--color-text)', textDecoration: 'none', borderRadius: '6px', border: '1px solid var(--color-border)', fontWeight: '600', fontSize: '14px' }}>
+            View Profile 👤
           </Link>
           <button onClick={logout} style={{ padding: '10px 20px', background: 'var(--color-card)', color: 'var(--color-text)', border: '1px solid var(--color-border)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}>
             Logout

@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard.jsx';
 import Browse from './pages/Browse.jsx';
 import { useAuth } from './hooks/useAuth.jsx';
 import Profile from './pages/Profile.jsx';
+import ViewProfile from './pages/ViewProfile.jsx';
 import Chat from './pages/Chat.jsx';
 import VideoRoom from './pages/VideoRoom.jsx';
 
@@ -40,6 +41,7 @@ function App() {
         <Route path="/browse" element={user ? <Browse /> : <Navigate to="/login" replace />} />
 
         <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" replace />} />
+        <Route path="/profile/view" element={user ? <ViewProfile /> : <Navigate to="/login" replace />} />
 
         <Route path="/chat" element={user ? <Chat /> : <Navigate to="/login" replace />} />
 

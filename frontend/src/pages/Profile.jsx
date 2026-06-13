@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth.jsx';
-import { updateMyProfileAPI } from '../api/user.api.js';
+import { updateMyProfileAPI, getUserProfileAPI } from '../api/user.api.js';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 
 function Profile() {
@@ -20,6 +21,25 @@ function Profile() {
   
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+
+  // Fetch the latest profile from the server (auth response may not include full profile)
+  useEffect(() => {
+    let mounted = true;
+    const fetchProfile = async () => {
+      try {
+        if (!user?._id) return;
+        const full = await getUserProfileAPI(user._id);
+        if (!mounted) return;
+        setBio(full.bio || '');
+        setLocation(full.location || '');
+        setSkillsOffered(full.skillsOffered || []);
+      } catch (err) {
+        // silently ignore - keep current state
+      }
+    };
+    fetchProfile();
+    return () => { mounted = false; };
+  }, [user]);
 
   // Append a skill to the local state array
   const handleAddSkill = (e) => {
