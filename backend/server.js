@@ -34,10 +34,23 @@ io.on('connection', (socket) => {
   socket.on('send_message', async (data) => {
     const { senderId, receiverId, text } = data;
     const roomName = [senderId, receiverId].sort().join('_');
+  });
 
+      socket.on('code-changed', ({ bookingId, code, language }) => {
+    socket.to(`room_${bookingId}`).emit('code-receive', { code, language });
+
+
+    socket.on('drawing', ({ bookingId, x0, y0, x1, y1, color }) => {
+  socket.to(`room_${bookingId}`).emit('drawing-receive', { x0, y0, x1, y1, color });
+});
+
+// Clear canvas event for both users
+socket.on('clear-canvas', (bookingId) => {
+  socket.to(`room_${bookingId}`).emit('clear-canvas-receive');
+});
     try {
       // Save message records seamlessly to MongoDB Atlas in real-time
-      const newMessage = await Message.create({
+      const newMessage = Message.create({
         chatRoomId: roomName,
         sender: senderId,
         receiver: receiverId,
