@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState, useRef, useEffect } from 'react'; 
 import { useParams, useLocation, Link } from 'react-router-dom';
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import { useAuth } from '../hooks/useAuth.jsx';
@@ -11,8 +11,34 @@ function VideoRoom() {
   const location = useLocation();
   const { skillTitle } = location.state || { skillTitle: 'Skill Swap Session' };
   const roomName = `SkillSwap_Room_${bookingId}`;
+  const jitsiContainerRef = useRef(null);
 
   const [workspaceMode, setWorkspaceMode] = useState('code');
+  const [isJitsiReady, setIsJitsiReady] = useState(false);
+
+  useEffect(() => {
+    // Ensure Jitsi API is loaded before rendering
+    if (window.JitsiMeetExternalAPI) {
+      setIsJitsiReady(true);
+    }
+  }, []);
+
+  const handleJitsiIframeRef = (iframeRef) => {
+    if (iframeRef) {
+      iframeRef.style.height = '100%';
+      iframeRef.style.width = '100%';
+      iframeRef.style.display = 'block';
+    }
+  };
+
+  const handleJitsiReady = () => {
+    console.log('✅ Jitsi Meeting initialized successfully');
+    setIsJitsiReady(true);
+  };
+
+  const handleJitsiError = (error) => {
+    console.error('❌ Jitsi Meeting error:', error);
+  };
 
   return (
     <div style={{ padding: '30px', maxWidth: '1400px', margin: '0 auto', fontFamily: 'sans-serif', background: 'var(--color-background)', minHeight: '100vh' }}>
@@ -35,31 +61,52 @@ function VideoRoom() {
       
       <div style={{ display: 'flex', gap: '25px', flexWrap: 'wrap', alignItems: 'stretch' }}>
         
-        {/* Left Column: Fixed Video Link Stream */}
-        <div style={{ flex: '1 1 500px', height: '560px', border: '1px solid var(--color-border)', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+        {/* Left Column: Jitsi Video Conference */}
+        <div 
+          ref={jitsiContainerRef}
+          style={{ 
+            flex: '1 1 500px', 
+            height: '560px', 
+            border: '1px solid var(--color-border)', 
+            borderRadius: '12px', 
+            overflow: 'hidden', 
+            boxShadow: '0 4px 12px rgba(0,0,0,0.02)',
+            background: '#000'
+          }}
+        >
           <JitsiMeeting
             domain="meet.jit.si"
             roomName={roomName}
             configOverwrite={{
               startWithAudioMuted: false,
               startWithVideoMuted: false,
-              disableThirdPartyRequests: true,
-              prejoinPageEnabled: false,
+              disableThirdPartyRequests: false,
+              enableWelcomePage: true,
+              prejoinPageEnabled: true,
+              remoteVideoMenu: {
+                disableKick: false,
+              },
             }}
             interfaceConfigOverwrite={{
               TOOLBAR_BUTTONS: [
                 'microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen',
-                'factions', 'hangup', 'chat', 'raisehand', 'videoquality', 'filmstrip'
+                'hangup', 'chat', 'raisehand', 'videoquality', 'filmstrip'
               ],
+              SHOW_JITSI_WATERMARK: false,
+              MOBILE_APP_PROMO: false,
             }}
             userInfo={{
               displayName: user?.name || 'SkillSwap Peer',
-              email: user?.email
+              email: user?.email || 'unknown@skillswap.local'
             }}
-            getIFrameRef={(iframeRef) => {
-              iframeRef.style.height = '100%';
-              iframeRef.style.width = '100%';
+            onApiReady={(externalAPI) => {
+              console.log('✅ Jitsi API ready');
+              handleJitsiReady();
             }}
+            onReadyToClose={() => {
+              console.log('Jitsi meeting closed');
+            }}
+            getIFrameRef={handleJitsiIframeRef}
           />
         </div>
 

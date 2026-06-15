@@ -30,27 +30,20 @@ io.on('connection', (socket) => {
     console.log(`👥 User ${userId} joined trade room channel: ${roomName}`);
   });
 
+  // Event: Join classroom for code/whiteboard collaboration
+  socket.on('join-classroom', (bookingId) => {
+    socket.join(`room_${bookingId}`);
+    console.log(`📚 User ${socket.id} joined classroom: room_${bookingId}`);
+  });
+
   // Event: Sending real-time messages
   socket.on('send_message', async (data) => {
     const { senderId, receiverId, text } = data;
     const roomName = [senderId, receiverId].sort().join('_');
-  });
-
-      socket.on('code-changed', ({ bookingId, code, language }) => {
-    socket.to(`room_${bookingId}`).emit('code-receive', { code, language });
-
-
-    socket.on('drawing', ({ bookingId, x0, y0, x1, y1, color }) => {
-  socket.to(`room_${bookingId}`).emit('drawing-receive', { x0, y0, x1, y1, color });
-});
-
-// Clear canvas event for both users
-socket.on('clear-canvas', (bookingId) => {
-  socket.to(`room_${bookingId}`).emit('clear-canvas-receive');
-});
+    
     try {
       // Save message records seamlessly to MongoDB Atlas in real-time
-      const newMessage = Message.create({
+      const newMessage = await Message.create({
         chatRoomId: roomName,
         sender: senderId,
         receiver: receiverId,
@@ -62,6 +55,21 @@ socket.on('clear-canvas', (bookingId) => {
     } catch (err) {
       console.error("Failed to route immediate socket text delivery:", err);
     }
+  });
+
+  // Event: Real-time code changes
+  socket.on('code-changed', ({ bookingId, code, language }) => {
+    socket.to(`room_${bookingId}`).emit('code-receive', { code, language });
+  });
+
+  // Event: Real-time drawing on whiteboard
+  socket.on('drawing', ({ bookingId, x0, y0, x1, y1, color }) => {
+    socket.to(`room_${bookingId}`).emit('drawing-receive', { x0, y0, x1, y1, color });
+  });
+
+  // Event: Clear canvas for both users
+  socket.on('clear-canvas', (bookingId) => {
+    socket.to(`room_${bookingId}`).emit('clear-canvas-receive');
   });
 
   socket.on('disconnect', () => {
