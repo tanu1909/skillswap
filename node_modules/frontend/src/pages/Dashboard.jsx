@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.jsx';
 import { getMyBookingsAPI, updateBookingStatusAPI } from '../api/booking.api.js';
 import ReviewForm from '../components/ReviewForm.jsx';
+import { Phone, MessageCircle, CheckCircle, Star, LogOut, User, Search, Calendar, Zap } from 'lucide-react';
 
 function Dashboard() {
   const { user, logout } = useAuth();
@@ -48,6 +49,33 @@ function Dashboard() {
       weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
     });
 
+
+const handleGoogleConnect = async () => {
+  try {
+    // 1. Fetch the secure consent screen url from the backend
+    const response = await API.get('/auth/google/connect');
+    const { url } = response.data;
+
+    // 2. Open the URL inside a clean centered browser pop-up frame
+    const popup = window.open(url, 'Google OAuth', 'width=600,height=700,left=200,top=100');
+
+    // 3. Listen for the callback page's 'close' event message
+    window.addEventListener('message', (event) => {
+      if (event.data === 'google-calendar-connected') {
+        alert('Google Calendar synchronized successfully! 🎉');
+        popup.close();
+        fetchBookings(); // Reload dashboard log states
+      }
+    });
+  } catch (err) {
+    alert('Failed to launch calendar configuration module.');
+  }
+};
+
+
+
+
+
     // Individual dynamic inline color configurations based strictly on lifecycle status
     let badgeBg = '#FCE4D6';
     let badgeText = '#C65911';
@@ -74,40 +102,48 @@ function Dashboard() {
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             {b.status === 'confirmed' && (
-              <Link to={`/room/${b._id}`} state={{ skillTitle: b.skillTitle }} style={{ padding: '8px 14px', background: '#6BCB7A', color: 'white', textDecoration: 'none', borderRadius: '6px', fontSize: '13px', fontWeight: 'bold', display: 'inline-block', boxShadow: '0 2px 4px rgba(107,203,122,0.25)' }}>
-                Join Call 🎥
+              <Link to={`/room/${b._id}`} state={{ skillTitle: b.skillTitle }} title="Join Call" style={{ padding: '8px 12px', background: '#6BCB7A', color: 'white', textDecoration: 'none', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(107,203,122,0.25)', cursor: 'pointer', transition: 'transform 0.2s' }}>
+                <Phone size={18} />
               </Link>
             )}
 
-            <Link to="/chat" state={{ partnerId: counterpart._id, partnerName: counterpart.name }} style={{ padding: '8px 14px', background: '#706CFF', color: 'white', textDecoration: 'none', borderRadius: '6px', fontSize: '13px', fontWeight: '500', display: 'inline-block', boxShadow: '0 2px 6px rgba(112,108,255,0.18)' }}>
-              Message 💬
+            <Link to="/chat" state={{ partnerId: counterpart._id, partnerName: counterpart.name }} title="Message" style={{ padding: '8px 12px', background: '#706CFF', color: 'white', textDecoration: 'none', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(112,108,255,0.18)', cursor: 'pointer', transition: 'transform 0.2s' }}>
+              <MessageCircle size={18} />
             </Link>
 
             {b.status === 'pending' && isTeacher && (
-              <button onClick={() => handleStatusChange(b._id, 'confirmed')} style={{ padding: '8px 14px', background: '#4EC2AE', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', boxShadow: '0 2px 6px rgba(78,194,174,0.24)' }}>
-                Accept
+              <button onClick={() => handleStatusChange(b._id, 'confirmed')} title="Accept" style={{ padding: '8px 12px', background: '#4EC2AE', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(78,194,174,0.24)', transition: 'transform 0.2s' }}>
+                <CheckCircle size={18} />
               </button>
             )}
 
             {b.status === 'confirmed' && isTeacher && (
-              <button onClick={() => handleStatusChange(b._id, 'completed')} style={{ padding: '8px 14px', background: '#5A9DFF', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', boxShadow: '0 2px 6px rgba(90,157,255,0.24)' }}>
-                Complete ✅
+              <button onClick={() => handleStatusChange(b._id, 'completed')} title="Complete" style={{ padding: '8px 12px', background: '#5A9DFF', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(90,157,255,0.24)', transition: 'transform 0.2s' }}>
+                <CheckCircle size={18} />
               </button>
             )}
 
             {b.status === 'completed' && !b.hasReview && activeReviewBookingId !== b._id && (
-              <button onClick={() => setActiveReviewBookingId(b._id)} style={{ padding: '8px 14px', background: '#A974FF', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', boxShadow: '0 2px 6px rgba(169,116,255,0.22)' }}>
-                Leave Review ⭐
+              <button onClick={() => setActiveReviewBookingId(b._id)} title="Leave Review" style={{ padding: '8px 12px', background: '#A974FF', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(169,116,255,0.22)', transition: 'transform 0.2s' }}>
+                <Star size={18} />
               </button>
             )}
 
             {b.status !== 'cancelled' && b.status !== 'completed' && (
-              <button onClick={() => handleStatusChange(b._id, 'cancelled')} style={{ padding: '8px 14px', background: '#FF7C7C', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px', boxShadow: '0 2px 6px rgba(255,124,124,0.24)' }}>
-                Cancel
+              <button onClick={() => handleStatusChange(b._id, 'cancelled')} title="Cancel" style={{ padding: '8px 12px', background: '#FF7C7C', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(255,124,124,0.24)', transition: 'transform 0.2s' }}>
+                ✕
               </button>
             )}
+
+            <button 
+              onClick={handleGoogleConnect}
+              title="Connect Google Calendar"
+              style={{ padding: '8px 12px', background: '#b8c75b', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(184,199,91,0.24)', transition: 'transform 0.2s' }}
+            >
+              <Calendar size={18} />
+            </button>
           </div>
 
         </div>
@@ -141,11 +177,11 @@ function Dashboard() {
           </p>
         </div>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-          <Link to="/profile/view" style={{ padding: '10px 20px', background: 'var(--color-card)', color: 'var(--color-text)', textDecoration: 'none', borderRadius: '6px', border: '1px solid var(--color-border)', fontWeight: '600', fontSize: '14px' }}>
-            View Profile 👤
+          <Link to="/profile/view" title="View Profile" style={{ padding: '8px 12px', background: 'var(--color-card)', color: 'var(--color-text)', textDecoration: 'none', borderRadius: '6px', border: '1px solid var(--color-border)', fontWeight: '600', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+            <User size={20} />
           </Link>
-          <button onClick={logout} style={{ padding: '10px 20px', background: 'var(--color-card)', color: 'var(--color-text)', border: '1px solid var(--color-border)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}>
-            Logout
+          <button onClick={logout} title="Logout" style={{ padding: '8px 12px', background: 'var(--color-card)', color: 'var(--color-text)', border: '1px solid var(--color-border)', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+            <LogOut size={20} />
           </button>
         </div>
       </div>    
@@ -154,8 +190,8 @@ function Dashboard() {
         <p style={{ margin: 0, color: 'var(--color-text)', fontWeight: '500', fontSize: '15px' }}>
           Looking to learn something new today?
         </p>
-        <Link to="/browse" style={{ padding: '10px 20px', background: 'var(--color-mint)', color: 'var(--color-text)', textDecoration: 'none', borderRadius: '6px', fontWeight: 'bold', fontSize: '14px' }}>
-          Search Profiles 🔍
+        <Link to="/browse" title="Browse Profiles" style={{ padding: '10px 20px', background: 'var(--color-mint)', color: 'var(--color-text)', textDecoration: 'none', borderRadius: '6px', fontWeight: 'bold', fontSize: '14px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          <Search size={18} />
         </Link>
       </div>
 

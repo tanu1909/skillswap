@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { searchUsersBySkillAPI } from '../api/user.api.js';
 import BookingPanel from '../components/BookingPanel.jsx';
+import { Star, MapPin, Eye, EyeOff } from 'lucide-react';
 
 // Separate item component to cleanly manage individual card expanded toggle states
 function ProfileCard({ profile, searchQuery }) {
@@ -12,22 +13,23 @@ function ProfileCard({ profile, searchQuery }) {
       {/* Header Info */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h3>{profile.name}</h3>
-        {profile.location && <span style={{ fontSize: '14px', color: '#666' }}>📍 {profile.location}</span>}
+        {profile.location && <span style={{ fontSize: '14px', color: '#666', display: 'flex', alignItems: 'center', gap: '4px' }}><MapPin size={16} /> {profile.location}</span>}
       </div>
       
       {/* Dynamic Star Ratings & Reviews Accordion Link */}
       <div style={{ margin: '-5px 0 10px 0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px' }}>
         {profile.reviewCount > 0 ? (
           <>
-            <span style={{ color: '#ffc107', fontWeight: 'bold' }}>
-              ⭐ {Number(profile.averageRating || 0).toFixed(1)} 
+            <span style={{ color: '#ffc107', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Star size={16} /> {Number(profile.averageRating || 0).toFixed(1)} 
             </span>
             <button
               type="button"
               onClick={() => setShowReviewsList(!showReviewsList)}
-              style={{ background: 'none', border: 'none', color: 'var(--color-accent)', cursor: 'pointer', textDecoration: 'underline', padding: 0, fontSize: '14px' }}
+              title={showReviewsList ? "Hide Reviews" : "Show Reviews"}
+              style={{ background: 'none', border: 'none', color: 'var(--color-accent)', cursor: 'pointer', padding: '4px 8px', fontSize: '14px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
             >
-              ({profile.reviewCount} {profile.reviewCount === 1 ? 'review' : 'reviews'} - {showReviewsList ? 'Hide' : 'View All'})
+              {showReviewsList ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </>
         ) : (

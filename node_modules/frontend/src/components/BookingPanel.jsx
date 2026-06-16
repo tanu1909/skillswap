@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createBookingAPI } from '../api/booking.api.js';
+import { Calendar, Clock, Send } from 'lucide-react';
 
 function BookingPanel({ teacherId, swapRequestId, skillTitle }) {
   const [sessionDate, setSessionDate] = useState('');
@@ -54,7 +55,7 @@ function BookingPanel({ teacherId, swapRequestId, skillTitle }) {
 
       <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <div>
-          <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Pick a Date:</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', marginBottom: '4px', fontWeight: 'bold' }}><Calendar size={16} /> Pick a Date:</label>
           <input 
             type="date" 
             value={sessionDate}
@@ -65,7 +66,7 @@ function BookingPanel({ teacherId, swapRequestId, skillTitle }) {
         </div>
 
         <div>
-          <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Available Hours:</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', marginBottom: '4px', fontWeight: 'bold' }}><Clock size={16} /> Available Hours:</label>
           <select 
             value={timeSlot} 
             onChange={(e) => setTimeSlot(e.target.value)}
@@ -90,10 +91,14 @@ function BookingPanel({ teacherId, swapRequestId, skillTitle }) {
             borderRadius: '4px', 
             cursor: 'pointer',
             fontWeight: 'bold',
-            marginTop: '5px'
+            marginTop: '5px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px'
           }}
         >
-          {loading ? 'Submitting...' : 'Request Booking Slot'}
+          <Send size={16} /> {loading ? 'Submitting...' : 'Request Booking Slot'}
         </button>
       </form>
     </div>

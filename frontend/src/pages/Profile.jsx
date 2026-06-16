@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth.jsx';
 import { updateMyProfileAPI, getUserProfileAPI } from '../api/user.api.js';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { Plus, Trash2, Save, MapPin } from 'lucide-react';
 
 
 function Profile() {
@@ -89,7 +90,7 @@ function Profile() {
 
   return (
     <div style={{ padding: '40px', maxWidth: '600px', margin: '0 auto', fontFamily: 'sans-serif', background: 'var(--color-background)' }}>
-      <h2>Edit Your Profile 🛠️</h2>
+      <h2>Edit Your Profile</h2>
       {message && <p style={{ color: 'green' }}>{message}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
@@ -106,7 +107,7 @@ function Profile() {
         </label>
 
         <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-          <strong>Location:</strong>
+          <strong style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><MapPin size={18} /> Location:</strong>
           <input 
             type="text" 
             value={location} 
@@ -139,8 +140,8 @@ function Profile() {
               <option value="Intermediate">Intermediate</option>
               <option value="Expert">Expert</option>
             </select>
-            <button onClick={handleAddSkill} style={{ padding: '8px 16px', background: 'var(--color-accent)', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-              Add
+            <button onClick={handleAddSkill} style={{ padding: '8px 16px', background: 'var(--color-accent)', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 'bold' }}>
+              <Plus size={18} /> Add
             </button>
           </div>
 
@@ -149,14 +150,14 @@ function Profile() {
             {skillsOffered.map((s, index) => (
               <span key={index} style={{ background: 'var(--color-surface-soft)', color: 'var(--color-text)', padding: '6px 12px', borderRadius: '99px', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 {s.skill} ({s.level})
-                <button type="button" onClick={() => handleRemoveSkill(s.skill)} style={{ background: 'none', border: 'none', color: '#cc0000', cursor: 'pointer', fontWeight: 'bold', padding: 0 }}>×</button>
+                <button type="button" onClick={() => handleRemoveSkill(s.skill)} style={{ background: 'none', border: 'none', color: '#cc0000', cursor: 'pointer', fontWeight: 'bold', padding: 0, display: 'flex', alignItems: 'center' }}><Trash2 size={16} /></button>
               </span>
             ))}
           </div>
         </div>
 
-        <button type="submit" style={{ padding: '12px', background: 'var(--color-accent)', color: 'white', border: 'none', borderRadius: '6px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', marginTop: '15px' }}>
-          Save & Save Profile Details
+        <button type="submit" style={{ padding: '12px', background: 'var(--color-accent)', color: 'white', border: 'none', borderRadius: '6px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', marginTop: '15px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+          <Save size={20} /> Save Profile
         </button>
       </form>
     </div>

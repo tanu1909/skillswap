@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createReviewAPI } from '../api/review.api.js';
+import { Star, Send, X } from 'lucide-react';
 
 function ReviewForm({ bookingId, onReviewSuccess, onCancel }) {
   const [rating, setRating] = useState(5);
@@ -29,7 +30,7 @@ function ReviewForm({ bookingId, onReviewSuccess, onCancel }) {
 
   return (
     <div style={{ marginTop: '15px', padding: '15px', border: '1px solid var(--color-border)', borderRadius: '6px', background: 'var(--color-card)', textAlign: 'left' }}>
-      <h4 style={{ margin: '0 0 10px 0', color: 'var(--color-text)' }}>Write a Review</h4>
+      <h4 style={{ margin: '0 0 10px 0', color: 'var(--color-text)', display: 'flex', alignItems: 'center', gap: '6px' }}><Star size={18} /> Write a Review</h4>
       
       {error && <p style={{ color: 'red', fontSize: '14px', margin: '0 0 10px 0' }}>{error}</p>}
 
@@ -64,16 +65,16 @@ function ReviewForm({ bookingId, onReviewSuccess, onCancel }) {
           <button 
             type="submit" 
             disabled={loading}
-            style={{ padding: '8px 16px', background: 'var(--color-accent)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+            style={{ padding: '8px 16px', background: 'var(--color-accent)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            {loading ? 'Submitting...' : 'Submit Review'}
+            <Send size={16} /> {loading ? 'Submitting...' : 'Submit Review'}
           </button>
           <button 
             type="button" 
             onClick={onCancel}
-            style={{ padding: '8px 16px', background: '#eee', color: '#333', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer' }}
+            style={{ padding: '8px 16px', background: '#eee', color: '#333', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            Cancel
+            <X size={16} /> Cancel
           </button>
         </div>
       </form>

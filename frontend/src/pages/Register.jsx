@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth.jsx';
 import { useNavigate, Link } from 'react-router-dom';
+import { User, Mail, Lock, UserPlus, LogIn } from 'lucide-react';
 
 function Register() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ function Register() {
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
           <label style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: 'var(--color-text)', fontWeight: '600' }}>
-            Full Name
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><User size={18} /> Full Name</span>
             <input
               type="text"
               value={name}
@@ -44,7 +45,7 @@ function Register() {
           </label>
 
           <label style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: 'var(--color-text)', fontWeight: '600' }}>
-            Email Address
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Mail size={18} /> Email Address</span>
             <input
               type="email"
               value={email}
@@ -55,7 +56,7 @@ function Register() {
           </label>
 
           <label style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: 'var(--color-text)', fontWeight: '600' }}>
-            Password
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Lock size={18} /> Password</span>
             <input
               type="password"
               value={password}
@@ -65,12 +66,12 @@ function Register() {
             />
           </label>
 
-          <button type="submit" style={{ padding: '14px 18px', background: '#A974FF', color: 'white', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', fontSize: '15px', boxShadow: '0 8px 20px rgba(169, 116, 255, 0.18)' }}>
-            Sign Up
+          <button type="submit" style={{ padding: '14px 18px', background: '#A974FF', color: 'white', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', fontSize: '15px', boxShadow: '0 8px 20px rgba(169, 116, 255, 0.18)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <UserPlus size={18} /> Sign Up
           </button>
 
           <p style={{ textAlign: 'center', margin: 0, color: 'var(--color-muted)' }}>
-            Already have an account? <Link to="/login" style={{ color: '#8F7BFF', textDecoration: 'none', fontWeight: '700' }}>Sign in</Link>
+            Already have an account? <Link to="/login" style={{ color: '#8F7BFF', textDecoration: 'none', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '4px' }}><LogIn size={16} /> Sign in</Link>
           </p>
         </form>
       </div>

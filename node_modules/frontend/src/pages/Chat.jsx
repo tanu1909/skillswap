@@ -3,6 +3,7 @@ import { io } from 'socket.io-client';
 import { useAuth } from '../hooks/useAuth.jsx';
 import { getChatHistoryAPI } from '../api/chat.api.js';
 import { useLocation, Link } from 'react-router-dom';
+import { Send, ArrowLeft, MessageCircle } from 'lucide-react';
 
 function Chat() {
   const { user } = useAuth();
@@ -77,7 +78,7 @@ function Chat() {
     return (
       <div style={{ padding: '40px', textAlign: 'center' }}>
         <h3>No active chat session selected.</h3>
-        <Link to="/dashboard">Return to Dashboard</Link>
+        <Link to="/dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><ArrowLeft size={18} /> Return to Dashboard</Link>
       </div>
     );
   }
@@ -86,10 +87,10 @@ function Chat() {
     <div style={{ maxWidth: '700px', margin: '30px auto', padding: '20px', fontFamily: 'sans-serif', background: 'var(--color-background)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--color-border)', paddingBottom: '15px', marginBottom: '15px' }}>
         <div>
-          <h2 style={{ margin: 0 }}>Chat with {partnerName} 💬</h2>
+          <h2 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}><MessageCircle size={24} /> Chat with {partnerName}</h2>
           <p style={{ margin: '5px 0 0 0', color: 'var(--color-muted)', fontSize: '14px' }}>Discuss availability, lesson objectives, or swap goals.</p>
         </div>
-        <Link to="/dashboard" style={{ textDecoration: 'none', color: 'var(--color-accent)', fontWeight: 'bold' }}>← Back to Dashboard</Link>
+        <Link to="/dashboard" style={{ textDecoration: 'none', color: 'var(--color-accent)', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><ArrowLeft size={18} /> Back</Link>
       </div>
 
       {/* Message Stream Feed */}
@@ -126,8 +127,8 @@ function Chat() {
           required
           style={{ flex: 1, padding: '12px', borderRadius: '6px', border: '1px solid var(--color-border)', fontSize: '15px' }}
         />
-        <button type="submit" style={{ padding: '12px 24px', background: 'var(--color-accent)', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '15px' }}>
-          Send
+        <button type="submit" style={{ padding: '12px 24px', background: 'var(--color-accent)', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '15px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          <Send size={18} /> Send
         </button>
       </form>
     </div>
