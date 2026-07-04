@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth.jsx';
 import { getUserProfileAPI } from '../api/user.api.js';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Edit2, ArrowLeft, MapPin, BookOpen, Lightbulb } from 'lucide-react';
 
 function ViewProfile() {
   const { user } = useAuth();
+  const { id } = useParams();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -13,8 +14,9 @@ function ViewProfile() {
     let mounted = true;
     const load = async () => {
       try {
-        if (!user?._id) return setLoading(false);
-        const data = await getUserProfileAPI(user._id);
+        const profileId = id || user?._id;
+        if (!profileId) return setLoading(false);
+        const data = await getUserProfileAPI(profileId);
         if (!mounted) return;
         setProfile(data);
       } catch (err) {
@@ -25,7 +27,7 @@ function ViewProfile() {
     };
     load();
     return () => { mounted = false; };
-  }, [user]);
+  }, [id, user?._id]);
 
   if (loading) return <p style={{ padding: '24px', color: 'var(--color-text)', background: 'var(--color-background)', minHeight: '100vh' }}>Loading profile...</p>;
   if (!profile) return <p style={{ padding: '24px', color: 'var(--color-text)', background: 'var(--color-background)', minHeight: '100vh' }}>Profile not available.</p>;
@@ -38,7 +40,9 @@ function ViewProfile() {
           <p style={{ margin: '6px 0 0 0', color: 'var(--color-text)', opacity: 0.8 }}>{profile.email}</p>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
-          <Link to="/profile" style={{ padding: '8px 14px', background: 'var(--color-accent)', color: '#fff', textDecoration: 'none', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Edit2 size={16} /> Edit Profile</Link>
+          {profile._id === user?._id && (
+            <Link to="/profile" style={{ padding: '8px 14px', background: 'var(--color-accent)', color: '#fff', textDecoration: 'none', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Edit2 size={16} /> Edit Profile</Link>
+          )}
           <Link to="/dashboard" style={{ padding: '8px 14px', background: 'var(--color-card)', color: 'var(--color-text)', textDecoration: 'none', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '6px', border: '1px solid var(--color-border)' }}><ArrowLeft size={16} /> Back</Link>
         </div>
       </div>

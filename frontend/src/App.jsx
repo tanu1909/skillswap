@@ -32,20 +32,21 @@ function App() {
           element={user ? <Dashboard /> : <Navigate to="/login" replace />} 
         />
 
+        <Route path="/browse" element={user ? <Browse /> : <Navigate to="/login" replace />} />
+
+        <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" replace />} />
+        <Route path="/profile/view" element={user ? <ViewProfile /> : <Navigate to="/login" replace />} />
+        <Route path="/users/:id" element={user ? <ViewProfile /> : <Navigate to="/login" replace />} />
+
+        <Route path="/chat" element={user ? <Chat /> : <Navigate to="/login" replace />} />
+
+        <Route path="/room/:bookingId" element={user ? <VideoRoom /> : <Navigate to="/login" replace />} />
+
        {/* catch all route */}
         <Route 
           path="*" 
           element={<Navigate to={user ? "/dashboard" : "/login"} replace />} 
         />
-
-        <Route path="/browse" element={user ? <Browse /> : <Navigate to="/login" replace />} />
-
-        <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" replace />} />
-        <Route path="/profile/view" element={user ? <ViewProfile /> : <Navigate to="/login" replace />} />
-
-        <Route path="/chat" element={user ? <Chat /> : <Navigate to="/login" replace />} />
-
-        <Route path="/room/:bookingId" element={user ? <VideoRoom /> : <Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   );
