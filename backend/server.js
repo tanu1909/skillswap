@@ -9,11 +9,12 @@ connectDB();
 
 // Create HTTP Server wrapped around Express app instance
 const server = http.createServer(app);
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://skillswap-frontend-9tok-kappa.vercel.app";
 
 // Initialize Socket.io Server instance with CORS configuration
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Frontend URL port
+    origin: FRONTEND_URL,
     methods: ["GET", "POST"]
   }
 });

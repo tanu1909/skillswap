@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import io from 'socket.io-client';
 
-const SOCKET_URL = 'http://localhost:5000';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://skillswap-3-r5yn.onrender.com';
 
 function CodeWorkspace({ bookingId }) {
   const [code, setCode] = useState('// Welcome to your shared SkillSwap classroom workspace!\n// Type your code here...');

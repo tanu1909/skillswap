@@ -4,6 +4,7 @@ import { google } from 'googleapis';
 
 // 🟢 GOOGLE CALENDAR ENGINE PIPELINE
 export const createGoogleCalendarEvent = async (booking, teacherTokens) => {
+  const frontendUrl = process.env.FRONTEND_URL || "https://skillswap-frontend-9tok-kappa.vercel.app";
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
@@ -16,7 +17,7 @@ export const createGoogleCalendarEvent = async (booking, teacherTokens) => {
 
   const eventPayload = {
     summary: `SkillSwap: ${booking.skillTitle}`,
-    description: `Your live peer-to-peer learning session is confirmed! Join your custom classroom here: http://localhost:3000/room/${booking._id}`,
+    description: `Your live peer-to-peer learning session is confirmed! Join your custom classroom here: ${frontendUrl}/room/${booking._id}`,
     start: {
       dateTime: new Date(booking.sessionDate).toISOString(),
       timeZone: 'Asia/Kolkata',

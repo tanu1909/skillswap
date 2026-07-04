@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-const SOCKET_URL = 'http://localhost:5000';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://skillswap-3-r5yn.onrender.com';
 
 function Whiteboard({ bookingId }) {
   const canvasRef = useRef(null);

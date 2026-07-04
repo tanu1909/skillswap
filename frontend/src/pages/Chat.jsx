@@ -23,7 +23,7 @@ function Chat() {
     if (!user?._id || !partnerId) return;
 
     // Connect to backend websocket port instance
-    const newSocket = io('http://localhost:5000');
+    const newSocket = io(import.meta.env.VITE_SOCKET_URL || 'https://skillswap-3-r5yn.onrender.com');
     setSocket(newSocket);
 
     // Notify backend to assemble and join our distinct room channel

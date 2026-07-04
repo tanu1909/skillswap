@@ -13,10 +13,11 @@ import googleAuthRoutes from './routes/googleAuth.routes.js';
 dotenv.config();
 
 const app = express();
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://skillswap-frontend-9tok-kappa.vercel.app";
 
 app.use(cors(
   {
-    origin:true,
+    origin: FRONTEND_URL,
     credentials: true
 }
 ));
