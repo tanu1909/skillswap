@@ -3,7 +3,7 @@ import { useParams, useLocation, Link } from 'react-router-dom';
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import { useAuth } from '../hooks/useAuth.jsx';
 import CodeWorkspace from '../components/CodeWorkspace.jsx';
-import WhiteBoard from '../components/Whiteboard.jsx';
+import Whiteboard from '../components/WhiteBoard.jsx';
 import { Video, Code, Palette, ArrowLeft } from 'lucide-react';
 
 function VideoRoom() {
