@@ -40,7 +40,7 @@ function Register() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              style={{ padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--color-border)', background: 'white', outline: 'none' }}
+              style={{ padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', outline: 'none' }}
             />
           </label>
 
@@ -51,7 +51,7 @@ function Register() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={{ padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--color-border)', background: 'white', outline: 'none' }}
+              style={{ padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', outline: 'none' }}
             />
           </label>
 
@@ -62,7 +62,7 @@ function Register() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              style={{ padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--color-border)', background: 'white', outline: 'none' }}
+              style={{ padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', outline: 'none' }}
             />
           </label>
 

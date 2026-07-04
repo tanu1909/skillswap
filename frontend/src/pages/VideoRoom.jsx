@@ -118,13 +118,13 @@ function VideoRoom() {
           <div style={{ display: 'flex', borderBottom: '1px solid var(--color-border)' }}>
             <button 
               onClick={() => setWorkspaceMode('code')}
-              style={{ padding: '12px 24px', background: 'transparent', border: 'none', borderBottom: workspaceMode === 'code' ? '3px solid #4A7A64' : '3px solid transparent', color: workspaceMode === 'code' ? '#4A7A64' : 'var(--color-text)', fontWeight: 'bold', cursor: 'pointer', opacity: workspaceMode === 'code' ? 1 : 0.6, transition: 'all 0.15s', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              style={{ padding: '12px 24px', background: 'transparent', border: 'none', borderBottom: workspaceMode === 'code' ? '3px solid #34D399' : '3px solid transparent', color: workspaceMode === 'code' ? '#34D399' : 'var(--color-text)', fontWeight: 'bold', cursor: 'pointer', opacity: workspaceMode === 'code' ? 1 : 0.6, transition: 'all 0.15s', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
             >
               <Code size={18} /> Shared Editor
             </button>
             <button 
               onClick={() => setWorkspaceMode('whiteboard')}
-              style={{ padding: '12px 24px', background: 'transparent', border: 'none', borderBottom: workspaceMode === 'whiteboard' ? '3px solid #185FA5' : '3px solid transparent', color: workspaceMode === 'whiteboard' ? '#185FA5' : 'var(--color-text)', fontWeight: 'bold', cursor: 'pointer', opacity: workspaceMode === 'whiteboard' ? 1 : 0.6, transition: 'all 0.15s', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              style={{ padding: '12px 24px', background: 'transparent', border: 'none', borderBottom: workspaceMode === 'whiteboard' ? '3px solid #60A5FA' : '3px solid transparent', color: workspaceMode === 'whiteboard' ? '#60A5FA' : 'var(--color-text)', fontWeight: 'bold', cursor: 'pointer', opacity: workspaceMode === 'whiteboard' ? 1 : 0.6, transition: 'all 0.15s', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
             >
               <Palette size={18} /> Active Whiteboard
             </button>

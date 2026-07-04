@@ -53,25 +53,25 @@ function BookingPanel({ teacherId, swapRequestId, skillTitle }) {
       {error && <p style={{ color: 'red', fontSize: '14px' }}>{error}</p>}
       {message && <p style={{ color: 'green', fontSize: '14px' }}>{message}</p>}
 
-      <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', color: 'var(--color-text)' }}>
         <div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', marginBottom: '4px', fontWeight: 'bold' }}><Calendar size={16} /> Pick a Date:</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', marginBottom: '4px', fontWeight: 'bold', color: 'var(--color-text)' }}><Calendar size={16} /> Pick a Date:</label>
           <input 
             type="date" 
             value={sessionDate}
             onChange={(e) => setSessionDate(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box', border: '1px solid var(--color-border)', borderRadius: '4px' }}
+            style={{ width: '100%', padding: '8px', boxSizing: 'border-box', border: '1px solid var(--color-border)', borderRadius: '4px', background: 'var(--color-surface)', color: 'var(--color-text)' }}
           />
         </div>
 
         <div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', marginBottom: '4px', fontWeight: 'bold' }}><Clock size={16} /> Available Hours:</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', marginBottom: '4px', fontWeight: 'bold', color: 'var(--color-text)' }}><Clock size={16} /> Available Hours:</label>
           <select 
             value={timeSlot} 
             onChange={(e) => setTimeSlot(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', background: '#fff', border: '1px solid var(--color-border)', borderRadius: '4px' }}
+            style={{ width: '100%', padding: '8px', background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)', borderRadius: '4px' }}
           >
             <option value="">-- Select Time Window --</option>
             {availableSlots.map((slot, index) => (

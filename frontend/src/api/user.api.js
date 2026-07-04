@@ -16,3 +16,8 @@ export const getUserProfileAPI = async (id) => {
   const response = await API.get(`/users/${id}`);
   return response.data;
 };
+
+export const getMatchesAPI = async () => {
+  const response = await API.get('/users/matches');
+  return response.data;
+};

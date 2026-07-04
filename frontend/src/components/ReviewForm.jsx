@@ -34,30 +34,30 @@ function ReviewForm({ bookingId, onReviewSuccess, onCancel }) {
       
       {error && <p style={{ color: 'red', fontSize: '14px', margin: '0 0 10px 0' }}>{error}</p>}
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', color: 'var(--color-text)' }}>
         <div>
-          <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px', fontWeight: 'bold' }}>Rating:</label>
+          <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px', fontWeight: 'bold', color: 'var(--color-text)' }}>Rating:</label>
           <select 
             value={rating} 
             onChange={(e) => setRating(Number(e.target.value))}
-            style={{ padding: '6px', borderRadius: '4px', border: '1px solid var(--color-border)', background: '#fff' }}
+            style={{ padding: '6px', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)' }}
           >
-            <option value="5">⭐⭐⭐⭐⭐ </option>
-            <option value="4">⭐⭐⭐⭐ </option>
-            <option value="3">⭐⭐⭐ </option>
-            <option value="2">⭐⭐ </option>
-            <option value="1">⭐ </option>
+            <option value="5" style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}>⭐⭐⭐⭐⭐ </option>
+            <option value="4" style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}>⭐⭐⭐⭐ </option>
+            <option value="3" style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}>⭐⭐⭐ </option>
+            <option value="2" style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}>⭐⭐ </option>
+            <option value="1" style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}>⭐ </option>
           </select>
         </div>
 
         <div>
-          <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px', fontWeight: 'bold' }}>Your Review:</label>
+          <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px', fontWeight: 'bold', color: 'var(--color-text)' }}>Your Review:</label>
           <textarea 
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="Share your experience"
             required
-            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid var(--color-border)', minHeight: '60px', boxSizing: 'border-box' }}
+            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', minHeight: '60px', boxSizing: 'border-box' }}
           />
         </div>
 
@@ -72,7 +72,7 @@ function ReviewForm({ bookingId, onReviewSuccess, onCancel }) {
           <button 
             type="button" 
             onClick={onCancel}
-            style={{ padding: '8px 16px', background: '#eee', color: '#333', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            style={{ padding: '8px 16px', background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)', borderRadius: '4px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
             <X size={16} /> Cancel
           </button>

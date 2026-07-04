@@ -27,25 +27,25 @@ function ViewProfile() {
     return () => { mounted = false; };
   }, [user]);
 
-  if (loading) return <p style={{ padding: '24px' }}>Loading profile...</p>;
-  if (!profile) return <p style={{ padding: '24px' }}>Profile not available.</p>;
+  if (loading) return <p style={{ padding: '24px', color: 'var(--color-text)', background: 'var(--color-background)', minHeight: '100vh' }}>Loading profile...</p>;
+  if (!profile) return <p style={{ padding: '24px', color: 'var(--color-text)', background: 'var(--color-background)', minHeight: '100vh' }}>Profile not available.</p>;
 
   return (
-    <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto', fontFamily: 'sans-serif' }}>
+    <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto', fontFamily: 'sans-serif', color: 'var(--color-text)', background: 'var(--color-background)', minHeight: '100vh' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div>
-          <h2 style={{ margin: 0 }}>{profile.name}</h2>
+          <h2 style={{ margin: 0, color: 'var(--color-text)' }}>{profile.name}</h2>
           <p style={{ margin: '6px 0 0 0', color: 'var(--color-text)', opacity: 0.8 }}>{profile.email}</p>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
           <Link to="/profile" style={{ padding: '8px 14px', background: 'var(--color-accent)', color: '#fff', textDecoration: 'none', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Edit2 size={16} /> Edit Profile</Link>
-          <Link to="/dashboard" style={{ padding: '8px 14px', background: 'var(--color-card)', color: 'var(--color-text)', textDecoration: 'none', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><ArrowLeft size={16} /> Back</Link>
+          <Link to="/dashboard" style={{ padding: '8px 14px', background: 'var(--color-card)', color: 'var(--color-text)', textDecoration: 'none', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '6px', border: '1px solid var(--color-border)' }}><ArrowLeft size={16} /> Back</Link>
         </div>
       </div>
 
-      <div style={{ background: 'var(--color-card)', padding: '20px', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
-        <h4 style={{ marginTop: 0 }}>Bio</h4>
-        <p style={{ marginTop: 6 }}>{profile.bio || '—'}</p>
+      <div style={{ background: 'var(--color-card)', padding: '20px', borderRadius: '12px', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}>
+        <h4 style={{ marginTop: 0, color: 'var(--color-text)' }}>Bio</h4>
+        <p style={{ marginTop: 6, color: 'var(--color-text)', opacity: 0.9 }}>{profile.bio || '—'}</p>
 
         <h4 style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><MapPin size={18} /> Location</h4>
         <p style={{ marginTop: 6 }}>{profile.location || '—'}</p>

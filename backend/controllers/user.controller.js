@@ -92,9 +92,7 @@ export const getUserProfile = async (req, res) => {
 export const updateMyProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
     user.bio = req.body.bio !== undefined ? req.body.bio : user.bio;
     user.location = req.body.location !== undefined ? req.body.location : user.location;
@@ -112,5 +110,84 @@ export const updateMyProfile = async (req, res) => {
     res.json(plainUser);
   } catch (err) {
     return res.status(500).json({ message: err.message });
+  }
+};
+
+// GET /api/users/matches  —  Auto-Matching Recommendation Engine
+export const getMatches = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const currentUserId = new mongoose.Types.ObjectId(user._id.toString());
+    const wantedSkills = (user.skillsWanted || []).map(s => s.toLowerCase().trim()).filter(Boolean);
+    const offeredSkills = (user.skillsOffered || []).map(s => s.skill.toLowerCase().trim());
+
+    if (wantedSkills.length === 0) {
+      return res.json([]);
+    }
+
+    // Find users who offer at least one skill the current user wants
+    const wantedRegexes = wantedSkills.map(s => new RegExp(s, 'i'));
+
+    const candidates = await User.aggregate([
+      {
+        $match: {
+          _id: { $ne: currentUserId },
+          'skillsOffered.skill': { $in: wantedRegexes }
+        }
+      },
+      {
+        $lookup: {
+          from: 'reviews',
+          localField: '_id',
+          foreignField: 'reviewee',
+          as: 'receivedReviews'
+        }
+      },
+      {
+        $addFields: {
+          averageRating: { $ifNull: [{ $avg: '$receivedReviews.rating' }, 0] },
+          reviewCount: { $size: '$receivedReviews' }
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          bio: 1,
+          location: 1,
+          skillsOffered: 1,
+          skillsWanted: 1,
+          availability: 1,
+          averageRating: 1,
+          reviewCount: 1
+        }
+      }
+    ]);
+
+    // Score each candidate by overlap count + mutual-match bonus
+    const scored = candidates.map(candidate => {
+      const theirOffered = (candidate.skillsOffered || []).map(s => s.skill.toLowerCase().trim());
+      const theirWanted = (candidate.skillsWanted || []).map(s => s.toLowerCase().trim());
+
+      const matchingSkills = wantedSkills.filter(w =>
+        theirOffered.some(o => o.includes(w) || w.includes(o))
+      );
+
+      const mutualMatches = offeredSkills.filter(o =>
+        theirWanted.some(w => w.includes(o) || o.includes(w))
+      );
+
+      const matchScore = matchingSkills.length + (mutualMatches.length > 0 ? 0.5 : 0);
+
+      return { ...candidate, matchingSkills, mutualMatches, matchScore };
+    });
+
+    scored.sort((a, b) => b.matchScore - a.matchScore);
+
+    res.json(scored);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

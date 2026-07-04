@@ -7,7 +7,7 @@ function Whiteboard({ bookingId }) {
   const canvasRef = useRef(null);
   const socketRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [color, setColor] = useState('#185FA5'); 
+  const [color, setColor] = useState('#60A5FA');
   const lastPos = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -95,11 +95,11 @@ function Whiteboard({ bookingId }) {
         <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
           {/* Color Selectors */}
           <div style={{ display: 'flex', gap: '6px' }}>
-            {['#185FA5', '#4A7A64', '#D98880', '#333333'].map((c) => (
+            {['#60A5FA', '#34D399', '#F87171', '#FFFFFF'].map((c) => (
               <button
                 key={c}
                 onClick={() => setColor(c)}
-                style={{ width: '20px', height: '20px', borderRadius: '50%', background: c, border: color === c ? '2px solid var(--color-text)' : '1px solid #ccc', cursor: 'pointer', transform: color === c ? 'scale(1.15)' : 'scale(1)', transition: 'transform 0.1s' }}
+                style={{ width: '20px', height: '20px', borderRadius: '50%', background: c, border: color === c ? '2px solid var(--color-text)' : '1px solid var(--color-border)', cursor: 'pointer', transform: color === c ? 'scale(1.15)' : 'scale(1)', transition: 'transform 0.1s' }}
               />
             ))}
           </div>
@@ -119,7 +119,7 @@ function Whiteboard({ bookingId }) {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUpOrLeave}
         onMouseLeave={handleMouseUpOrLeave}
-        style={{ background: '#fafafa', border: '1px solid #eee', borderRadius: '8px', cursor: 'crosshair', width: '100%', boxSizing: 'border-box' }}
+        style={{ background: '#121520', border: '1px solid var(--color-border)', borderRadius: '8px', cursor: 'crosshair', width: '100%', boxSizing: 'border-box' }}
       />
     </div>
   );

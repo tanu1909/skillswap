@@ -32,6 +32,7 @@ skillsOffered:[
         level:{type:String, enum:['Beginner', 'Intermediate', 'Expert'], required:true}
     }
 ],
+skillsWanted:[{ type: String, trim: true }],
 availability:[
     {
         day:{type: String, enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], required: true },

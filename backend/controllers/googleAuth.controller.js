@@ -48,13 +48,14 @@ export const googleCallback = async (req, res) => {
     const { tokens } = await oauth2Client.getToken(code);
 
     // Update the corresponding user in MongoDB with the tokens
-    await User.findByIdAndUpdate(state, {
-      googleTokens: {
-        accessToken: tokens.access_token,
-        refreshToken: tokens.refresh_token, // Saved safely for long-term API access
-        expiryDate: tokens.expiry_date
-      }
-    });
+    const updateData = {
+      'googleTokens.accessToken': tokens.access_token,
+      'googleTokens.expiryDate': tokens.expiry_date
+    };
+    if (tokens.refresh_token) {
+      updateData['googleTokens.refreshToken'] = tokens.refresh_token;
+    }
+    await User.findByIdAndUpdate(state, { $set: updateData });
 
     // Send a clean script message to close the OAuth window and refresh the dashboard profile
     res.send(`

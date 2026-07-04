@@ -43,12 +43,12 @@ function Login() {
 
                     <label style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: 'var(--color-text)', fontWeight: '600' }}>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Mail size={18} /> Email Address</span>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required style={{ padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--color-border)', background: 'white', outline: 'none' }} />
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required style={{ padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', outline: 'none' }} />
                     </label>
 
                     <label style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: 'var(--color-text)', fontWeight: '600' }}>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Lock size={18} /> Password</span>
-                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required style={{ padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--color-border)', background: 'white', outline: 'none' }} />
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required style={{ padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', outline: 'none' }} />
                     </label>
 
                     <button type="submit" style={{ padding: '14px 18px', background: '#8F7BFF', color: 'white', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', fontSize: '15px', boxShadow: '0 8px 20px rgba(143, 123, 255, 0.18)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
