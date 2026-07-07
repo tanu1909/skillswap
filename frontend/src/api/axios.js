@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_ORIGIN = import.meta.env.VITE_API_URL || 'https://skillswap-3-r5yn.onrender.com';
+const DEFAULT_API_ORIGIN = 'https://skillswap-3-r5yn.onrender.com';
+const configuredApiOrigin = import.meta.env.VITE_API_URL || DEFAULT_API_ORIGIN;
+const isLocalApiOrigin = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i.test(configuredApiOrigin);
+const API_ORIGIN = import.meta.env.PROD && isLocalApiOrigin ? DEFAULT_API_ORIGIN : configuredApiOrigin;
 const API_URL = `${API_ORIGIN.replace(/\/$/, '').replace(/\/api$/, '')}/api`;
 
 const API = axios.create({
