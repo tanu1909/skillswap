@@ -2,13 +2,61 @@ import Booking from "../models/Booking.model.js";
 import Review from '../models/Review.model.js';
 import { google } from 'googleapis';
 
+const getGoogleRedirectUri = () => {
+  if (process.env.GOOGLE_REDIRECT_URI) return process.env.GOOGLE_REDIRECT_URI;
+  if (process.env.BACKEND_URL) {
+    return `${process.env.BACKEND_URL.replace(/\/$/, '')}/api/auth/google/callback`;
+  }
+  return undefined;
+};
+
+const validateGoogleConfig = () => {
+  const missing = ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET']
+    .filter((key) => !process.env[key]);
+
+  if (!getGoogleRedirectUri()) missing.push('GOOGLE_REDIRECT_URI or BACKEND_URL');
+  if (missing.length) {
+    throw new Error(`Missing Google Calendar configuration: ${missing.join(', ')}`);
+  }
+};
+
+const parseTimeLabel = (timeLabel) => {
+  const match = timeLabel.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!match) throw new Error(`Invalid time slot format: ${timeLabel}`);
+
+  let hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  const meridiem = match[3].toUpperCase();
+
+  if (meridiem === 'PM' && hours !== 12) hours += 12;
+  if (meridiem === 'AM' && hours === 12) hours = 0;
+
+  return { hours, minutes };
+};
+
+const buildCalendarDateTime = (sessionDate, timeSlot, part) => {
+  const [startLabel, endLabel] = timeSlot.split('-').map((value) => value.trim());
+  const selectedLabel = part === 'end' ? endLabel : startLabel;
+  if (!selectedLabel) throw new Error(`Invalid time slot format: ${timeSlot}`);
+
+  const date = new Date(sessionDate);
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const { hours, minutes } = parseTimeLabel(selectedLabel);
+
+  return `${year}-${month}-${day}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
+};
+
 // 🟢 GOOGLE CALENDAR ENGINE PIPELINE
 export const createGoogleCalendarEvent = async (booking, teacherTokens) => {
+  validateGoogleConfig();
+
   const frontendUrl = process.env.FRONTEND_URL || "https://skillswap-frontend-9tok-kappa.vercel.app";
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
+    getGoogleRedirectUri()
   );
 
   // Authenticate using the teacher's saved refresh token credentials
@@ -19,11 +67,11 @@ export const createGoogleCalendarEvent = async (booking, teacherTokens) => {
     summary: `SkillSwap: ${booking.skillTitle}`,
     description: `Your live peer-to-peer learning session is confirmed! Join your custom classroom here: ${frontendUrl}/room/${booking._id}`,
     start: {
-      dateTime: new Date(booking.sessionDate).toISOString(),
+      dateTime: buildCalendarDateTime(booking.sessionDate, booking.timeSlot, 'start'),
       timeZone: 'Asia/Kolkata',
     },
     end: {
-      dateTime: new Date(new Date(booking.sessionDate).getTime() + 60 * 60 * 1000).toISOString(), // Default to 1 hour later
+      dateTime: buildCalendarDateTime(booking.sessionDate, booking.timeSlot, 'end'),
       timeZone: 'Asia/Kolkata',
     },
     attendees: [
@@ -95,6 +143,8 @@ export const updateBookingStatus = async (req, res) => {
     // ==========================================
     // 🟢 INTEGRATED STEP 5: AUTOMATED INVITATION TRIGGER
     // ==========================================
+    let calendarSyncWarning = '';
+
     if (status === 'confirmed') {
       // Re-query and populate full user objects to safely harvest emails and tokens
       const fullBooking = await Booking.findById(booking._id).populate('teacher learner');
@@ -108,12 +158,18 @@ export const updateBookingStatus = async (req, res) => {
         } catch (apiErr) {
           // Log calendar errors gracefully without crashing the whole HTTP response thread
           console.error("Google Calendar failed to inject event invitation:", apiErr.message);
+          calendarSyncWarning = `Session confirmed, but Google Calendar could not sync: ${apiErr.message}`;
         }
+      } else {
+        calendarSyncWarning = 'Session confirmed, but Google Calendar was not synced. The teacher must connect Google Calendar first.';
       }
     }
     // ==========================================
 
-    res.json(booking);
+    const responseBody = booking.toObject();
+    if (calendarSyncWarning) responseBody.calendarSyncWarning = calendarSyncWarning;
+
+    res.json(responseBody);
 
   } catch (err) {
     res.status(500).json({ message: err.message });

@@ -14,10 +14,22 @@ dotenv.config();
 
 const app = express();
 const FRONTEND_URL = process.env.FRONTEND_URL || "https://skillswap-frontend-9tok-kappa.vercel.app";
+const allowedOrigins = [
+  ...FRONTEND_URL.split(',').map((origin) => origin.trim()).filter(Boolean),
+  "https://skillswap-frontend-9tok-kappa.vercel.app",
+];
+
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  return allowedOrigins.includes(origin) || /^https:\/\/skillswap-frontend-9tok.*\.vercel\.app$/.test(origin);
+};
 
 app.use(cors(
   {
-    origin: FRONTEND_URL,
+    origin: (origin, callback) => {
+      if (isAllowedOrigin(origin)) return callback(null, true);
+      return callback(new Error(`CORS blocked origin: ${origin}`));
+    },
     credentials: true
 }
 ));

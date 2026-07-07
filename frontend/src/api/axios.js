@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+const API_ORIGIN = import.meta.env.VITE_API_URL || 'https://skillswap-3-r5yn.onrender.com';
+const API_URL = `${API_ORIGIN.replace(/\/$/, '').replace(/\/api$/, '')}/api`;
+
 const API = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json',
     },

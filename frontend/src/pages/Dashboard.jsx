@@ -49,8 +49,8 @@ function Dashboard() {
 
   const handleStatusChange = async (bookingId, newStatus) => {
     try {
-      await updateBookingStatusAPI(bookingId, newStatus);
-      alert(`Session ${newStatus}!`);
+      const updatedBooking = await updateBookingStatusAPI(bookingId, newStatus);
+      alert(updatedBooking.calendarSyncWarning || `Session ${newStatus}!`);
       fetchBookings();
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to update booking status.');
@@ -150,13 +150,15 @@ function Dashboard() {
               </button>
             )}
 
-            <button
-              onClick={handleGoogleConnect}
-              title="Connect Google Calendar"
-              style={{ padding: '8px 12px', background: '#b8c75b', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(184,199,91,0.24)', transition: 'transform 0.2s' }}
-            >
-              <Calendar size={18} />
-            </button>
+            {isTeacher && b.status !== 'completed' && b.status !== 'cancelled' && (
+              <button
+                onClick={handleGoogleConnect}
+                title="Connect Google Calendar"
+                style={{ padding: '8px 12px', background: '#b8c75b', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(184,199,91,0.24)', transition: 'transform 0.2s' }}
+              >
+                <Calendar size={18} />
+              </button>
+            )}
           </div>
         </div>
 

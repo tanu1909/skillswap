@@ -10,11 +10,23 @@ connectDB();
 // Create HTTP Server wrapped around Express app instance
 const server = http.createServer(app);
 const FRONTEND_URL = process.env.FRONTEND_URL || "https://skillswap-frontend-9tok-kappa.vercel.app";
+const allowedOrigins = [
+  ...FRONTEND_URL.split(',').map((origin) => origin.trim()).filter(Boolean),
+  "https://skillswap-frontend-9tok-kappa.vercel.app",
+];
+
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  return allowedOrigins.includes(origin) || /^https:\/\/skillswap-frontend-9tok.*\.vercel\.app$/.test(origin);
+};
 
 // Initialize Socket.io Server instance with CORS configuration
 const io = new Server(server, {
   cors: {
-    origin: FRONTEND_URL,
+    origin: (origin, callback) => {
+      if (isAllowedOrigin(origin)) return callback(null, true);
+      return callback(new Error(`Socket CORS blocked origin: ${origin}`));
+    },
     methods: ["GET", "POST"]
   }
 });

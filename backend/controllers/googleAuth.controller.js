@@ -2,12 +2,32 @@ import { google } from 'googleapis';
 import User from '../models/User.model.js';
 
 
+const getGoogleRedirectUri = () => {
+  if (process.env.GOOGLE_REDIRECT_URI) return process.env.GOOGLE_REDIRECT_URI;
+  if (process.env.BACKEND_URL) {
+    return `${process.env.BACKEND_URL.replace(/\/$/, '')}/api/auth/google/callback`;
+  }
+  return undefined;
+};
+
+const validateGoogleConfig = () => {
+  const missing = ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET']
+    .filter((key) => !process.env[key]);
+
+  if (!getGoogleRedirectUri()) missing.push('GOOGLE_REDIRECT_URI or BACKEND_URL');
+  if (missing.length) {
+    throw new Error(`Missing Google Calendar configuration: ${missing.join(', ')}`);
+  }
+};
+
 
 const getOAuthClient = () => {
+  validateGoogleConfig();
+
   return new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
+    getGoogleRedirectUri()
   );
 };
 
@@ -41,6 +61,7 @@ export const googleCallback = async (req, res) => {
   try {
     const { code, state } = req.query; // 'state' contains the user ID passed above
     if (!code) return res.status(400).send('Authorization code missing.');
+    if (!state) return res.status(400).send('User state missing.');
 
     const oauth2Client = getOAuthClient();
     
@@ -55,7 +76,8 @@ export const googleCallback = async (req, res) => {
     if (tokens.refresh_token) {
       updateData['googleTokens.refreshToken'] = tokens.refresh_token;
     }
-    await User.findByIdAndUpdate(state, { $set: updateData });
+    const updatedUser = await User.findByIdAndUpdate(state, { $set: updateData });
+    if (!updatedUser) return res.status(404).send('User not found.');
 
     // Send a clean script message to close the OAuth window and refresh the dashboard profile
     res.send(`
